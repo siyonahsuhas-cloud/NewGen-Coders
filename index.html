@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewGen Coders | Demystifying Tech & AI for Everyone</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for crisp icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 flex flex-col transition-colors duration-300">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('landing')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-500/20">
+                        &lt;/&gt;
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400 bg-clip-text text-transparent">NewGen Coders</span>
+                        <span class="hidden sm:inline-block text-xs px-2 py-0.5 ml-2 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-semibold rounded-full border border-emerald-300 dark:border-emerald-800">Youth-Led NPO</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <button onclick="switchTab('landing')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Home</button>
+                    <button onclick="switchTab('courses')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Courses & Syllabus</button>
+                    <button onclick="switchTab('playground')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Code Lab</button>
+                    <button onclick="switchTab('about')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Impact & Mission</button>
+                </nav>
+
+                <!-- Header Actions -->
+                <div class="flex items-center space-x-3">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggleBtn" onclick="toggleDarkMode()" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors" title="Toggle theme">
+                        <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-lg text-amber-400"></i>
+                    </button>
+
+                    <!-- Student Portal CTA -->
+                    <button onclick="switchTab('courses')" class="hidden sm:inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 shadow-sm transition-all hover:shadow-brand-500/25">
+                        <i class="fa-solid fa-rocket mr-2 text-xs"></i> Start Learning
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
+            <button onclick="switchTab('landing'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</button>
+            <button onclick="switchTab('courses'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Courses & Learning</button>
+            <button onclick="switchTab('playground'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Interactive Code Lab</button>
+            <button onclick="switchTab('about'); toggleMobileMenu()" class="block w-full text-left py-2 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Mission & Impact</button>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow">
+        
+        <!-- ================= LANDING PAGE SECTION ================= -->
+        <section id="tab-landing" class="tab-content block">
+            <!-- Hero Section -->
+            <div class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-slate-200 dark:border-slate-800/80 bg-gradient-to-b from-slate-100/60 to-transparent dark:from-slate-900/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center max-w-3xl mx-auto space-y-6">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950/80 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                            100% Free Open Education Initiative
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight">
+                            Empowering the Next Gen with <span class="bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 dark:from-brand-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">AI & Coding Skills</span>
+                        </h1>
+                        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                            A global youth-led non-profit structuring top-tier computer science, artificial intelligence, and cybersecurity curricula—bringing elite technical education to students everywhere, completely free.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                            <button onclick="switchTab('courses')" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
+                                Explore Syllabus & Courses <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                            </button>
+                            <button onclick="switchTab('playground')" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                                Try Code Lab Sandbox <i class="fa-solid fa-code ml-2 text-xs text-brand-500"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Stats Banner -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-center p-3 border-r border-slate-100 dark:border-slate-800 last:border-none">
+                        <div class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">2,400+</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Students Reached</div>
+                    </div>
+                    <div class="text-center p-3 border-r border-slate-100 dark:border-slate-800 last:border-none">
+                        <div class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">3 Core</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Structured Tracks</div>
+                    </div>
+                    <div class="text-center p-3 border-r border-slate-100 dark:border-slate-800 last:border-none">
+                        <div class="text-3xl font-extrabold text-purple-600 dark:text-purple-400">15+</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Partner Clubs</div>
+                    </div>
+                    <div class="text-center p-3">
+                        <div class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">100%</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Free & Accessible</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Tracks Overview -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight">Structured Pathways to Mastery</h2>
+                    <p class="text-slate-600 dark:text-slate-400 mt-3 text-base">We curate world-class open-source resources from top universities into step-by-step interactive paths with coding exercises.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Track 1 Card -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-python"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Track 01</span>
+                            <h3 class="text-xl font-bold mt-1 mb-3">Python Foundations</h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                                Master logic, variables, control flow, functions, and data structures. Build real text games and automation utilities.
+                            </p>
+                        </div>
+                        <button onclick="startCourse('python-101')" class="w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-sm hover:bg-brand-600 hover:text-white hover:border-brand-600 dark:hover:bg-brand-500 dark:hover:border-brand-500 transition-all">
+                            Start Python Path
+                        </button>
+                    </div>
+
+                    <!-- Track 2 Card -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Track 02</span>
+                            <h3 class="text-xl font-bold mt-1 mb-3">Artificial Intelligence & ML</h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                                Demystify neural networks, machine learning models, training data, prompt engineering, and algorithmic ethics.
+                            </p>
+                        </div>
+                        <button onclick="startCourse('ai-basics')" class="w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-sm hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-all">
+                            Explore AI & ML
+                        </button>
+                    </div>
+
+                    <!-- Track 3 Card -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Track 03</span>
+                            <h3 class="text-xl font-bold mt-1 mb-3">Cybersecurity & Web Security</h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                                Learn web architecture, cryptography basics, digital hygiene, and the core ethics of defensive cyber protection.
+                            </p>
+                        </div>
+                        <button onclick="startCourse('cyber-101')" class="w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold text-sm hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all">
+                            Start Cyber Track
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= INTERACTIVE COURSES & LESSONS SECTION ================= -->
+        <section id="tab-courses" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    
+                    <!-- Sidebar Navigation: Syllabus Tree -->
+                    <aside class="w-full lg:w-80 shrink-0 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm h-fit">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                            <h2 class="font-bold text-base flex items-center">
+                                <i class="fa-solid fa-book-open text-brand-500 mr-2"></i> Course Modules
+                            </h2>
+                            <span id="overallProgressBadge" class="text-xs font-semibold px-2 py-0.5 rounded-md bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300">0% Done</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full mb-6 overflow-hidden">
+                            <div id="progressBar" class="bg-brand-600 h-full w-0 transition-all duration-500"></div>
+                        </div>
+
+                        <!-- Module List -->
+                        <div id="syllabusTree" class="space-y-4 text-sm">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </aside>
+
+                    <!-- Main Learning Workspace -->
+                    <main class="flex-1 space-y-6">
+                        
+                        <!-- Lesson Header & Player Container -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                                <div>
+                                    <span id="lessonCategory" class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">Python Foundations</span>
+                                    <h1 id="lessonTitle" class="text-2xl font-extrabold tracking-tight mt-0.5">1.1 Introduction to Logic & Variables</h1>
+                                </div>
+                                <button id="markCompleteBtn" onclick="toggleCurrentLessonCompletion()" class="px-4 py-2 rounded-xl text-sm font-semibold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center">
+                                    <i class="fa-regular fa-circle-check mr-2"></i> <span id="completeBtnText">Mark Complete</span>
+                                </button>
+                            </div>
+
+                            <!-- Embedded YouTube Video Container -->
+                            <div class="relative w-full rounded-xl overflow-hidden bg-slate-900 aspect-video shadow-lg border border-slate-800 mb-6">
+                                <iframe id="videoPlayer" class="w-full h-full border-0" src="https://www.youtube-nocookie.com/embed/rfscVS0vtbw" title="Lesson Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+
+                            <!-- Curated Content Explanation & Takeaways -->
+                            <div class="prose dark:prose-invert max-w-none">
+                                <h3 class="text-lg font-bold mb-2">Lesson Overview & Key Concepts</h3>
+                                <p id="lessonDescription" class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
+                                    In this introductory lesson, we cover why programming is simply instructing computers using logical patterns. You will learn about variables, data types, and how programs process information.
+                                </p>
+                                
+                                <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Key Takeaways</h4>
+                                    <ul id="lessonTakeaways" class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-1">
+                                        <li>Variables store values in computer memory like named boxes.</li>
+                                        <li>Python automatically detects string, integer, and float data types.</li>
+                                        <li>Use the <code>print()</code> function to output results to the user.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lesson Practice Quiz Widget -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <i class="fa-solid fa-list-check text-indigo-500 mr-2"></i> Knowledge Check
+                            </h3>
+                            <div id="quizContainer" class="space-y-4">
+                                <p id="quizQuestion" class="font-medium text-slate-800 dark:text-slate-200 text-sm">Question text will load here...</p>
+                                <div id="quizOptions" class="space-y-2">
+                                    <!-- Quiz options populated dynamically -->
+                                </div>
+                                <div id="quizFeedback" class="hidden p-3 rounded-xl text-sm font-medium"></div>
+                                <button id="submitQuizBtn" onclick="checkQuizAnswer()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors">
+                                    Submit Answer
+                                </button>
+                            </div>
+                        </div>
+
+                    </main>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= INTERACTIVE CODE PLAYGROUND SECTION ================= -->
+        <section id="tab-playground" class="tab-content hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-extrabold tracking-tight">Interactive Code Lab</h1>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Write Python or web code directly in your browser. Test your solutions in real time!</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="codePresetSelect" onchange="loadPresetCode()" class="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium focus:outline-none">
+                            <option value="python-hello">Preset: Python Hello World</option>
+                            <option value="python-variables">Preset: Variables & Logic</option>
+                            <option value="python-loop">Preset: For Loop Counter</option>
+                            <option value="html-basic">Preset: HTML Web Card</option>
+                        </select>
+                        <button onclick="runCode()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-all flex items-center">
+                            <i class="fa-solid fa-play mr-2 text-xs"></i> Run Code
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px]">
+                    <!-- Editor Pane -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-lg">
+                        <div class="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                                <span class="text-xs font-mono text-slate-400 ml-2">main.py</span>
+                            </div>
+                            <button onclick="resetCode()" class="text-xs text-slate-400 hover:text-white transition-colors">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                            </button>
+                        </div>
+                        <textarea id="codeEditor" class="flex-1 bg-slate-900 text-slate-100 p-4 code-font text-sm focus:outline-none resize-none leading-relaxed" spellcheck="false"># Write your Python code below
+name = "NewGen Coder"
+lessons_completed = 5
+
+print(f"Welcome to NewGen Coders, {name}!")
+print(f"You have completed {lessons_completed} lessons so far.")
+
+if lessons_completed >= 5:
+    print("Great milestone achieved! Keep up the awesome work.")
+</textarea>
+                    </div>
+
+                    <!-- Output Console Pane -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-lg">
+                        <div class="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400 flex items-center">
+                                <i class="fa-solid fa-terminal mr-2 text-emerald-400"></i> Terminal / Execution Console
+                            </span>
+                            <button onclick="clearConsole()" class="text-xs text-slate-400 hover:text-white">Clear Output</button>
+                        </div>
+                        <div id="consoleOutput" class="flex-1 p-4 code-font text-sm text-emerald-400 overflow-y-auto whitespace-pre-wrap">
+> Ready to execute script. Click "Run Code" above.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MISSION & ABOUT SECTION ================= -->
+        <section id="tab-about" class="tab-content hidden">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+                <!-- Mission Intro -->
+                <div class="text-center max-w-3xl mx-auto space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand-400">Our Strategic Initiative</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold">Bridging the Global Tech Education Gap</h1>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        NewGen Coders was founded on a simple principle: high-quality Computer Science, AI, and Cybersecurity education should be accessible to every student, regardless of socioeconomic background.
+                    </p>
+                </div>
+
+                <!-- Curation vs Creation Philosophy -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center text-lg font-bold mb-4">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Curated Educational Architecture</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Rather than reinventing the wheel with amateur videos, we aggregate the world's highest-quality open-source tutorials from MIT, freeCodeCamp, and top educators, structuring them into sequential learning pathways with custom quizzes and hands-on code labs.
+                        </p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-bold mb-4">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Youth-Led & Community Driven</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                            Run by high school and university students for students. We partner with local schools, after-school clubs, and community hubs to host peer-mentorship workshops using our free open-access platform.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Strategic Advisory / Team Structure -->
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                    <h2 class="text-2xl font-bold mb-6">Initiative Roadmap & Impact Plan</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                            <div class="font-bold text-brand-600 dark:text-brand-400 mb-1">Phase 1: Foundation</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Launch curated tracks in Python, AI Ethics, and Web Security with interactive exercises.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                            <div class="font-bold text-indigo-600 dark:text-indigo-400 mb-1">Phase 2: Outreach</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Establish 10+ high school chapter clubs & partner with local libraries for weekend code camps.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                            <div class="font-bold text-purple-600 dark:text-purple-400 mb-1">Phase 3: Mentorship</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Connect student learners with university CS majors for project feedback and guidance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 rounded bg-brand-600 text-white flex items-center justify-center font-bold text-xs">&lt;/&gt;</div>
+                <span class="font-bold text-sm tracking-tight">NewGen Coders</span>
+                <span class="text-xs text-slate-500">© 2026 Non-Profit Initiative</span>
+            </div>
+            <div class="flex items-center space-x-6 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <button onclick="switchTab('landing')" class="hover:text-brand-600">Home</button>
+                <button onclick="switchTab('courses')" class="hover:text-brand-600">Syllabus</button>
+                <button onclick="switchTab('playground')" class="hover:text-brand-600">Playground</button>
+                <button onclick="switchTab('about')" class="hover:text-brand-600">About</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic Architecture -->
+    <script>
+        // ================= CURRICULUM DATA MODEL =================
+        const courseData = [
+            {
+                id: 'python-101',
+                track: 'Python Foundations',
+                trackColor: 'text-blue-600 dark:text-blue-400',
+                title: '1.1 Introduction to Logic & Variables',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/rfscVS0vtbw',
+                description: 'Understand the fundamentals of programming. Learn how computers execute instructions sequentially and how variables store data in memory.',
+                takeaways: [
+                    'Variables store values in computer memory like named boxes.',
+                    'Python automatically detects string, integer, and float data types.',
+                    'Use the print() function to output results to the user console.'
+                ],
+                quiz: {
+                    question: 'Which line of Python code correctly assigns the integer 10 to a variable named `count`?',
+                    options: [
+                        'var count = 10',
+                        'count := 10',
+                        'count = 10',
+                        'integer count = 10'
+                    ],
+                    correctIndex: 2,
+                    explanation: 'In Python, variable assignment uses a single equals sign (`=`) without requiring type keywords.'
+                }
+            },
+            {
+                id: 'python-conditionals',
+                track: 'Python Foundations',
+                trackColor: 'text-blue-600 dark:text-blue-400',
+                title: '1.2 Conditionals & Control Flow',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/PqFKRqpHrJw',
+                description: 'Learn how to make decisions in code using if, elif, and else blocks alongside logical operators.',
+                takeaways: [
+                    'Use `if`, `elif`, and `else` to branching execution paths.',
+                    'Comparison operators include == (equal), != (not equal), >, and <.',
+                    'Indentation (4 spaces) defines code blocks in Python.'
+                ],
+                quiz: {
+                    question: 'What is the output of: `if 5 > 3: print("Yes") else: print("No")`?',
+                    options: [
+                        'Prints "No"',
+                        'Prints "Yes"',
+                        'Syntax Error',
+                        'Prints Nothing'
+                    ],
+                    correctIndex: 1,
+                    explanation: 'Since 5 is greater than 3, the condition evaluates to True and "Yes" is printed.'
+                }
+            },
+            {
+                id: 'ai-basics',
+                track: 'Artificial Intelligence & ML',
+                trackColor: 'text-purple-600 dark:text-purple-400',
+                title: '2.1 What is AI & Machine Learning?',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/ad79nYk2keg',
+                description: 'Explore the difference between traditional rule-based software and Machine Learning algorithms that learn patterns directly from data.',
+                takeaways: [
+                    'Machine Learning trains models on dataset examples rather than manual coding.',
+                    'Supervised learning relies on labeled training datasets.',
+                    'Neural networks mimic interconnected brain nodes to evaluate complex signals.'
+                ],
+                quiz: {
+                    question: 'What fundamentally distinguishes Machine Learning from traditional programming?',
+                    options: [
+                        'ML requires no computers to run',
+                        'ML learns rules automatically from data patterns',
+                        'ML only runs inside web browsers',
+                        'Traditional programming is faster at vision tasks'
+                    ],
+                    correctIndex: 1,
+                    explanation: 'ML models extract relationships and patterns from historical training data automatically.'
+                }
+            },
+            {
+                id: 'ai-ethics',
+                track: 'Artificial Intelligence & ML',
+                trackColor: 'text-purple-600 dark:text-purple-400',
+                title: '2.2 Algorithmic Bias & AI Ethics',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/59bMh54gVk0',
+                description: 'Examine how historical human biases can be inherited by AI models and how engineers build fairer, more transparent systems.',
+                takeaways: [
+                    'Biased training data produces biased model recommendations.',
+                    'Transparency & explainability are vital for high-stakes AI applications.',
+                    'Ethical AI design requires diverse teams and continuous auditing.'
+                ],
+                quiz: {
+                    question: 'Where does algorithmic bias primarily originate in Machine Learning models?',
+                    options: [
+                        'Computer hardware overheating',
+                        'Biased or non-representative historical training data',
+                        'Using Python instead of C++',
+                        'Running models in dark mode'
+                    ],
+                    correctIndex: 1,
+                    explanation: 'If training datasets contain historical disparities or exclusions, the model learns and reinforces those patterns.'
+                }
+            },
+            {
+                id: 'cyber-101',
+                track: 'Cybersecurity & Web',
+                trackColor: 'text-emerald-600 dark:text-emerald-400',
+                title: '3.1 How the Web Works & HTTP Basics',
+                videoUrl: 'https://www.youtube-nocookie.com/embed/eee24t_r-R8',
+                description: 'Understand how clients, servers, DNS servers, and routers interact when you visit websites securely.',
+                takeaways: [
+                    'Browsers send HTTP/HTTPS requests to remote servers.',
+                    'DNS translates domain names (e.g. google.com) into IP addresses.',
+                    'HTTPS encrypts data in transit using TLS/SSL.'
+                ],
+                quiz: {
+                    question: 'What critical role does HTTPS perform that standard HTTP does not?',
+                    options: [
+                        'Makes websites load 10x faster',
+                        'Encrypts data exchanged between client and server',
+                        'Allows free domain registration',
+                        'Prevents HTML errors'
+                    ],
+                    correctIndex: 1,
+                    explanation: 'HTTPS provides cryptographic security and data encryption to prevent tampering and eavesdropping.'
+                }
+            }
+        ];
+
+        // State Management
+        let currentLessonIndex = 0;
+        let completedLessons = JSON.parse(localStorage.getItem('ngc_completed') || '[]');
+
+        // Initialize App on DOM Load
+        window.onload = function() {
+            renderSyllabusTree();
+            loadLesson(0);
+            updateProgressUI();
+            initTheme();
+        };
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                activeTab.classList.add('block');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Render Syllabus Sidebar Tree
+        function renderSyllabusTree() {
+            const tree = document.getElementById('syllabusTree');
+            tree.innerHTML = '';
+
+            courseData.forEach((lesson, idx) => {
+                const isCompleted = completedLessons.includes(lesson.id);
+                const isActive = idx === currentLessonIndex;
+
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-xl cursor-pointer transition-all flex items-start space-x-3 ${
+                    isActive 
+                        ? 'bg-brand-50 text-brand-700 dark:bg-brand-950/80 dark:text-brand-300 font-semibold border border-brand-200 dark:border-brand-800' 
+                        : 'hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300'
+                }`;
+                item.onclick = () => loadLesson(idx);
+
+                item.innerHTML = `
+                    <div class="mt-0.5 text-base">
+                        ${isCompleted 
+                            ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' 
+                            : isActive 
+                                ? '<i class="fa-solid fa-circle-play text-brand-500"></i>' 
+                                : '<i class="fa-regular fa-circle text-slate-400"></i>'}
+                    </div>
+                    <div class="flex-1 text-xs">
+                        <div class="font-bold line-clamp-1">${lesson.title}</div>
+                        <div class="text-[11px] opacity-75">${lesson.track}</div>
+                    </div>
+                `;
+                tree.appendChild(item);
+            });
+        }
+
+        // Load Active Lesson into Workspace
+        function loadLesson(index) {
+            currentLessonIndex = index;
+            const lesson = courseData[index];
+
+            document.getElementById('lessonCategory').innerText = lesson.track;
+            document.getElementById('lessonCategory').className = `text-xs font-bold uppercase tracking-wider ${lesson.trackColor}`;
+            document.getElementById('lessonTitle').innerText = lesson.title;
+            document.getElementById('videoPlayer').src = lesson.videoUrl;
+            document.getElementById('lessonDescription').innerText = lesson.description;
+
+            // Render takeaways
+            const takeawaysUl = document.getElementById('lessonTakeaways');
+            takeawaysUl.innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
+
+            // Update completion button state
+            updateCompletionBtn();
+
+            // Load Quiz
+            loadQuiz(lesson.quiz);
+
+            // Re-render sidebar to update active indicators
+            renderSyllabusTree();
+        }
+
+        function startCourse(lessonId) {
+            const idx = courseData.findIndex(c => c.id === lessonId);
+            if (idx !== -1) {
+                switchTab('courses');
+                loadLesson(idx);
+            }
+        }
+
+        // Complete Lesson Toggle
+        function toggleCurrentLessonCompletion() {
+            const currentId = courseData[currentLessonIndex].id;
+            if (completedLessons.includes(currentId)) {
+                completedLessons = completedLessons.filter(id => id !== currentId);
+            } else {
+                completedLessons.push(currentId);
+            }
+            localStorage.setItem('ngc_completed', JSON.stringify(completedLessons));
+            updateCompletionBtn();
+            updateProgressUI();
+            renderSyllabusTree();
+        }
+
+        function updateCompletionBtn() {
+            const currentId = courseData[currentLessonIndex].id;
+            const isCompleted = completedLessons.includes(currentId);
+            const btn = document.getElementById('markCompleteBtn');
+            const text = document.getElementById('completeBtnText');
+
+            if (isCompleted) {
+                btn.className = "px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 transition-all flex items-center";
+                text.innerText = "Completed ✓";
+            } else {
+                btn.className = "px-4 py-2 rounded-xl text-sm font-semibold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center";
+                text.innerText = "Mark Complete";
+            }
+        }
+
+        function updateProgressUI() {
+            const total = courseData.length;
+            const done = completedLessons.length;
+            const pct = Math.round((done / total) * 100);
+
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('overallProgressBadge').innerText = `${pct}% Done`;
+        }
+
+        // Load Quiz Data
+        function loadQuiz(quiz) {
+            document.getElementById('quizQuestion').innerText = quiz.question;
+            const optsContainer = document.getElementById('quizOptions');
+            optsContainer.innerHTML = '';
+            
+            const feedback = document.getElementById('quizFeedback');
+            feedback.classList.add('hidden');
+
+            quiz.options.forEach((opt, idx) => {
+                const label = document.createElement('label');
+                label.className = "flex items-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer text-sm transition-colors";
+                label.innerHTML = `
+                    <input type="radio" name="quizOption" value="${idx}" class="text-indigo-600 focus:ring-indigo-500 h-4 w-4 mr-3">
+                    <span class="text-slate-700 dark:text-slate-300">${opt}</span>
+                `;
+                optsContainer.appendChild(label);
+            });
+        }
+
+        function checkQuizAnswer() {
+            const selected = document.querySelector('input[name="quizOption"]:checked');
+            const feedback = document.getElementById('quizFeedback');
+            const quiz = courseData[currentLessonIndex].quiz;
+
+            if (!selected) {
+                feedback.className = "p-3 rounded-xl text-sm font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 block";
+                feedback.innerText = "Please select an answer first.";
+                return;
+            }
+
+            const val = parseInt(selected.value);
+            if (val === quiz.correctIndex) {
+                feedback.className = "p-3 rounded-xl text-sm font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 block";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> Correct! ${quiz.explanation}`;
+            } else {
+                feedback.className = "p-3 rounded-xl text-sm font-medium bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 block";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-2"></i> Not quite. ${quiz.explanation}`;
+            }
+        }
+
+        // ================= CODE LAB INTERACTIVE SIMULATOR =================
+        const presets = {
+            'python-hello': `# Python Basics
+name = "NewGen Coder"
+lessons_completed = 5
+
+print(f"Welcome to NewGen Coders, {name}!")
+print(f"You have completed {lessons_completed} lessons so far.")
+
+if lessons_completed >= 5:
+    print("Great milestone achieved! Keep up the awesome work.")`,
+            
+            'python-variables': `# Variables & Data Operations
+num1 = 15
+num2 = 25
+total = num1 + num2
+
+print("Addition Result:", total)
+print("Is total greater than 30?", total > 30)`,
+
+            'python-loop': `# Simple Loop Counter
+print("Counting down to launch:")
+for i in range(5, 0, -1):
+    print(f"T-minus {i}...")
+
+print("🚀 Blast off! Learning Python is awesome.")`,
+
+            'html-basic': `<!-- Web Structure Preview -->
+<div style="font-family:sans-serif; padding:15px; background:#1e293b; color:#fff; border-radius:10px;">
+    <h2 style="color:#3b82f6; margin-top:0;">NewGen Coders Card</h2>
+    <p>This is a live rendered web component test!</p>
+    <button style="background:#10b981; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;">Click Me</button>
+</div>`
+        };
+
+        function loadPresetCode() {
+            const key = document.getElementById('codePresetSelect').value;
+            if (presets[key]) {
+                document.getElementById('codeEditor').value = presets[key];
+            }
+        }
+
+        function resetCode() {
+            loadPresetCode();
+            clearConsole();
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleOutput').innerText = "> Terminal cleared.";
+        }
+
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const consoleOut = document.getElementById('consoleOutput');
+            consoleOut.innerText = "> Running script...\n";
+
+            // Simulated Lightweight Python/JS Execution Parser
+            setTimeout(() => {
+                try {
+                    let logs = [];
+                    const mockPrint = (...args) => logs.push(args.join(' '));
+
+                    if (code.includes('print(')) {
+                        // Extract print statements for simulated Python execution
+                        const lines = code.split('\n');
+                        lines.forEach(line => {
+                            const trimmed = line.trim();
+                            if (trimmed.startsWith('print(') && trimmed.endsWith(')')) {
+                                let content = trimmed.substring(6, trimmed.length - 1);
+                                // Simple string cleaner
+                                content = content.replace(/^f["']/, '').replace(/^["']/, '').replace(/["']$/, '');
+                                content = content.replace('{name}', 'NewGen Coder')
+                                                 .replace('{lessons_completed}', '5')
+                                                 .replace('{i}', '3');
+                                mockPrint(content);
+                            }
+                        });
+
+                        if (logs.length > 0) {
+                            consoleOut.innerText = logs.join('\n') + "\n\n> Program finished with exit code 0";
+                        } else {
+                            consoleOut.innerText = "> Program completed successfully (No explicit output).";
+                        }
+                    } else if (code.includes('<div') || code.includes('<h2')) {
+                        // Render HTML preview
+                        consoleOut.innerHTML = code;
+                    } else {
+                        consoleOut.innerText = "> Code executed cleanly.\n> Tip: Use print(...) to see output values.";
+                    }
+                } catch (err) {
+                    consoleOut.innerText = `> Execution Error: ${err.message}`;
+                }
+            }, 300);
+        }
+
+        // Theme Toggle Logic
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</body>
+</html>
